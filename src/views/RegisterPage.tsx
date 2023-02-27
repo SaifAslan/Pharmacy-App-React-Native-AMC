@@ -1,50 +1,108 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import AppButtons from "../components/AppButtons";
+import axios from "axios";
 import AuthenticationFormContainer from "../components/AuthenticationFormContainer";
+import { IUserInfoRegister } from "../interfaces/userInfo";
 import SharedStyles from "../Styles/SharedStyles";
+//@ts-ignore
+import { apiUrl } from "@env";
 
-const RegisterPage = () => {
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type RootStackParamList = {
+  LoginEmail: undefined;
+  RegisterPage: undefined;
+};
+
+type Props = NativeStackScreenProps<RootStackParamList>;
+
+const RegisterPage = ({ navigation }: Props) => {
+  const [userRegisteredInfo, setuserRegisteredInfo] =
+    useState<IUserInfoRegister>({
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
+      phone: "",
+      confirmPassword: "",
+    });
+
+  const handleUserRegisteredInfo = (name: string, value: string): void => {
+    setuserRegisteredInfo({ ...userRegisteredInfo, [name]: value });
+  };
+
+  const passwordsMatch = (): boolean => {
+    return userRegisteredInfo.password === userRegisteredInfo.confirmPassword;
+  };
+
+  const handleSubmitUser = () => {
+    if (passwordsMatch()) {
+      axios
+        .post(apiUrl + "authentication/create-user", userRegisteredInfo)
+        .then((response) => {
+          console.info("Please login using your details!");
+        })
+        .then(() => {
+          navigation.navigate("LoginEmail");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      Alert.alert("Error", "Passwords don't match");
+    }
+  };
+
   return (
     <View style={styles.loginEmailContainer}>
       <AuthenticationFormContainer>
         <Text style={styles.title}>register your information</Text>
         <TextInput
+          onChangeText={(value) => handleUserRegisteredInfo("name", value)}
+          value={userRegisteredInfo.name}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="Forename"
           textContentType="givenName"
           style={SharedStyles.AppInput}
         />
-          <TextInput
+        <TextInput
+          onChangeText={(value) => handleUserRegisteredInfo("surname", value)}
+          value={userRegisteredInfo.surname}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="Family name"
           textContentType="familyName"
           style={SharedStyles.AppInput}
         />
-          <TextInput
+        <TextInput
+          onChangeText={(value) => handleUserRegisteredInfo("phone", value)}
+          value={userRegisteredInfo.phone}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="Mobile number"
           textContentType="telephoneNumber"
           style={SharedStyles.AppInput}
         />
-          <TextInput
+        <TextInput
+          onChangeText={(value) => handleUserRegisteredInfo("email", value)}
+          value={userRegisteredInfo.email}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="Email address"
           textContentType="emailAddress"
           style={SharedStyles.AppInput}
         />
-          <TextInput
+        <TextInput
+          onChangeText={(value) => handleUserRegisteredInfo("password", value)}
+          value={userRegisteredInfo.password}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="Password"
           textContentType="password"
           style={SharedStyles.AppInput}
         />
-           <TextInput
+        <TextInput
+          onChangeText={(value) =>
+            handleUserRegisteredInfo("confirmPassword", value)
+          }
+          value={userRegisteredInfo.confirmPassword}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="Re-enter password"
           textContentType="password"
@@ -59,12 +117,11 @@ const RegisterPage = () => {
             TextStyle={styles.ButtonContinue}
             PressableStyle={styles.Buttons}
             onPress={() => {
-              console.log("pressed");
+              handleSubmitUser();
             }}
             buttonText="Register"
           />
         </View>
-     
       </AuthenticationFormContainer>
     </View>
   );

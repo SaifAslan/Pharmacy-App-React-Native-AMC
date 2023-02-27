@@ -1,4 +1,6 @@
-import React from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import axios from "axios";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,8 +13,42 @@ import {
 import AppButtons from "../components/AppButtons";
 import AuthenticationFormContainer from "../components/AuthenticationFormContainer";
 import SharedStyles from "../Styles/SharedStyles";
+//@ts-ignore
+import { apiUrl } from "@env";
+import validator from "validator";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { addEmail } from "../redux/features/userInfoSlice";
 
-const LoginEmail = () => {
+type RootStackParamList = {
+  RegisterPage: undefined;
+  LoginPassword: undefined;
+  LoginEmail: undefined;
+};
+
+type Props = NativeStackScreenProps<RootStackParamList>;
+
+const LoginEmail = ({ navigation }: Props) => {
+  const dispatch = useAppDispatch();
+ const userInfo = useAppSelector((state) => state.userInfo);
+ console.log(userInfo);
+ 
+  const [email, setEmail] = useState<string>("");
+
+  const handleCheckEmail = () => {
+    if (validator.isEmail(email)) {
+      axios
+        .post(apiUrl + "authentication/login-check-email", { email: email })
+        .then((response) => {
+          console.log(response.data.message);
+          dispatch(addEmail(email));
+          navigation.navigate("LoginPassword");
+        })
+        .catch((error) => console.log(error));
+    } else {
+      alert("Please enter a valid email");
+    }
+  };
+
   return (
     <View style={styles.loginEmailContainer}>
       <AuthenticationFormContainer>
@@ -22,6 +58,8 @@ const LoginEmail = () => {
           placeholder="example@mail.com"
           style={SharedStyles.AppInput}
           textContentType="emailAddress"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
         <View style={styles.ButtonsContainer}>
           <AppButtons
@@ -32,7 +70,7 @@ const LoginEmail = () => {
             TextStyle={styles.ButtonRegister}
             PressableStyle={styles.Buttons}
             onPress={() => {
-              console.log("pressed");
+              navigation.navigate("RegisterPage");
             }}
             buttonText="Register"
           />
@@ -44,7 +82,9 @@ const LoginEmail = () => {
             TextStyle={styles.ButtonContinue}
             PressableStyle={styles.Buttons}
             onPress={() => {
-              console.log("pressed");
+              handleCheckEmail();
+
+              // navigation.navigate("LoginPassword")}
             }}
             buttonText="Continue"
           />

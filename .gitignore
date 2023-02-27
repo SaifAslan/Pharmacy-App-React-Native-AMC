@@ -9,6 +9,22 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+ios/Pods/
+ios/Podfile.lock
+android/app/build/
+android/.gradle/
+android/build/
+android/gradle/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Misc
+*.env
 
 # macOS
 .DS_Store
+
