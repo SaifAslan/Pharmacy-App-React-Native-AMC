@@ -15,7 +15,7 @@ export const userInfoSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action: PayloadAction<IUserInfo>) => {
-      state = action.payload;
+     return state = action.payload;
     },
     logout: (state) => {
       //@ts-ignore

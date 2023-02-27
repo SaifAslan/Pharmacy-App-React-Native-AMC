@@ -21,7 +21,7 @@ import { addEmail } from "../redux/features/userInfoSlice";
 
 type RootStackParamList = {
   RegisterPage: undefined;
-  LoginPassword: undefined;
+  LoginPassword: {email: string};
   LoginEmail: undefined;
 };
 
@@ -29,8 +29,7 @@ type Props = NativeStackScreenProps<RootStackParamList>;
 
 const LoginEmail = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
- const userInfo = useAppSelector((state) => state.userInfo);
- console.log(userInfo);
+//  const userInfo = useAppSelector((state) => state.userInfo);
  
   const [email, setEmail] = useState<string>("");
 
@@ -41,7 +40,7 @@ const LoginEmail = ({ navigation }: Props) => {
         .then((response) => {
           console.log(response.data.message);
           dispatch(addEmail(email));
-          navigation.navigate("LoginPassword");
+          navigation.navigate("LoginPassword",{email});
         })
         .catch((error) => console.log(error));
     } else {
