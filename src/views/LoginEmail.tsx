@@ -18,6 +18,7 @@ import { apiUrl } from "@env";
 import validator from "validator";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { addEmail } from "../redux/features/userInfoSlice";
+import Map from "../components/Map";
 
 type RootStackParamList = {
   RegisterPage: undefined;
@@ -93,6 +94,7 @@ const LoginEmail = ({ navigation }: Props) => {
           source={require("../assets/images/167-1673721_controlled-drugs-cabinets-hdl-icon-logo-pharmacy-logo-1.png")}
         />
       </AuthenticationFormContainer>
+      {/* <Map /> */}
     </View>
   );
 };
