@@ -94,9 +94,8 @@ const LoginPassword = ({ route, navigation }: Props) => {
             }}
             PressableStyle={styles.Buttons}
             onPress={handleLogin}
-          >
-            <Text style={styles.ButtonContinue}>Continue</Text>
-          </AppButtons>
+            Content={<Text style={styles.ButtonContinue}>Continue</Text>}
+            />           
         </View>
         <Image
           style={styles.logoStyle}

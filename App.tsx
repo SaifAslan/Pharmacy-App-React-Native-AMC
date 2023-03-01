@@ -10,6 +10,7 @@ import Home from "./src/views/Home";
 import Index from "./src/views/Index";
 import { PersistGate } from "redux-persist/integration/react";
 import {persistStore} from "redux-persist";
+import Pharmacy from "./src/views/Pharmacy";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,8 +27,10 @@ export default function App() {
         >
           <Stack.Screen name="LoginEmail" component={LoginEmail} />
           <Stack.Screen name="RegisterPage" component={RegisterPage} />
-          <Stack.Screen name="LoginPassword" component={LoginPassword} />
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="LoginPassword" component={LoginPassword} />
+          <Stack.Screen name="Pharmacy" component={Pharmacy} />
+
 
           {/* <Stack.Screen name="CSR" component={CSR} /> */}
         </Stack.Navigator>

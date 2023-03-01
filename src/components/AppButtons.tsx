@@ -11,23 +11,21 @@ import {
 type Props = {
   onPress: () => void;
   ViewStyle: StyleProp<ViewStyle>;
-  TextStyle: StyleProp<TextStyle>;
+  // TextStyle: StyleProp<TextStyle>;
   PressableStyle: any;
-  buttonText: String;
+  // children: React.ReactNode;
+  Content: React.ReactNode
 };
 
 const AppButtons: React.FC<Props> = ({
   PressableStyle,
   ViewStyle,
-  TextStyle,
   onPress,
-  buttonText,
+  Content,
 }) => {
   return (
     <Pressable style={PressableStyle} onPress={onPress}>
-      <View style={ViewStyle}>
-        <Text style={TextStyle}>{buttonText}</Text>
-      </View>
+      <View style={ViewStyle}>{Content}</View>
     </Pressable>
   );
 };

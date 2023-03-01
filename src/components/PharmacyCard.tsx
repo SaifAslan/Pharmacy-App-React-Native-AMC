@@ -1,16 +1,27 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, Linking, StyleSheet, Text, View } from "react-native";
 import { IPharmacy } from "../interfaces/pharmacy";
 import { useAppSelector } from "../redux/hooks";
 import { calculateDistance } from "../utils/calculateDistance";
+import useLocationUrl from "../utils/useLocationUrl";
 import AppButtons from "./AppButtons";
 
 interface Props {
   pharmacy: IPharmacy;
 }
 
+type RootStackParamList = {
+  Pharmacy: { pharmacy: IPharmacy };
+};
+
 const PharmacyCard = ({ pharmacy }: Props) => {
   const userLocation = useAppSelector((state) => state.userLocation);
+  const locationUrl = useLocationUrl(
+    pharmacy.location.lat,
+    pharmacy.location.lng
+  );
+  const navigation = useNavigation();
 
   let distance = useMemo(
     () =>
@@ -45,11 +56,21 @@ const PharmacyCard = ({ pharmacy }: Props) => {
       <View style={styles.rightContainer}>
         <AppButtons
           ViewStyle={{}}
-          onPress={() => console.log("pressed")}
+          onPress={() => navigation.navigate("Pharmacy", { pharmacy })}
           PressableStyle={{}}
-        >
-          <Text>hi</Text>
-        </AppButtons>
+          Content={<Text style={styles.viewText}>View</Text>}
+        />
+        <AppButtons
+          ViewStyle={{}}
+          onPress={() => Linking.openURL(locationUrl)}
+          PressableStyle={{}}
+          Content={
+            <Image
+              style={styles.image}
+              source={require("../assets/images/Road_alt_light.png")}
+            />
+          }
+        />
       </View>
     </View>
   );
@@ -70,7 +91,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   infoContainer: {
-    marginVertical: 8,
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -84,6 +105,22 @@ const styles = StyleSheet.create({
     color: "#FF5C00",
   },
   rightContainer: {
-    flex: 3,
+    flex: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingEnd: 14,
+    paddingStart: 36,
+  },
+  image: {
+    // width: 100,
+    // height: 100,
+    // borderRadius: 50,
+    // marginVertical: 10,
+  },
+  viewText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#6FB98F",
   },
 });

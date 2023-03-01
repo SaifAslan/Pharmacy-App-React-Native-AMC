@@ -71,9 +71,9 @@ const LoginEmail = ({ navigation }: Props) => {
             onPress={() => {
               navigation.navigate("RegisterPage");
             }}
-          >
-            <Text style={styles.ButtonRegister}>Register</Text>{" "}
-          </AppButtons>
+            Content={<Text style={styles.ButtonRegister}>Register</Text>}
+          />
+
           <AppButtons
             ViewStyle={{
               ...styles.ButtonTextContainer,
@@ -83,9 +83,8 @@ const LoginEmail = ({ navigation }: Props) => {
             onPress={() => {
               handleCheckEmail();
             }}
-          >
-            <Text style={styles.ButtonContinue}>Continue</Text>
-          </AppButtons>
+            Content={<Text style={styles.ButtonContinue}>Continue</Text>}
+          />
         </View>
         <Image
           style={styles.logoStyle}

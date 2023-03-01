@@ -118,9 +118,8 @@ const RegisterPage = ({ navigation }: Props) => {
             onPress={() => {
               handleSubmitUser();
             }}
-          >
-            <Text style={styles.ButtonContinue}>Register</Text>
-          </AppButtons>
+            Content={<Text style={styles.ButtonContinue}>Register</Text>}
+          />
         </View>
       </AuthenticationFormContainer>
     </View>

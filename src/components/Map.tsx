@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { StyleSheet, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
@@ -13,6 +19,7 @@ import { saveUserLocation } from "../redux/features/userLocationSlice";
 export default function Map() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const _map = useRef<MapView | null>(null);
   const dispatch = useAppDispatch();
   const pharmacies = useAppSelector((state) => state.pharmacies);
   const userLocation = useAppSelector((state) => state.userLocation);
@@ -31,21 +38,23 @@ export default function Map() {
           latitude: location.coords.latitude,
         })
       );
-
-      fetchNearbyPharmacies(
-        encodeURIComponent(
-          location.coords.latitude + "," + location.coords.longitude
-        )
-      );
-
-      // fetchNearbyPharmacies()
-      // setLocation(location);
+      fetchNearbyPharmaciesCB(location);
     })();
   }, []);
 
-  const _map = useRef<MapView | null>(null);
+  const fetchNearbyPharmaciesCB = useCallback(
+    (location: {}) => {
+      fetchNearbyPharmacies(
+        encodeURIComponent(
+          //@ts-ignore
+          location.coords.latitude + "," + location.coords.longitude
+        )
+      );
+    },
+    [userLocation.latitude || userLocation.longitude]
+  );
 
-  function fitMapToPolyline(data: IPharmacy[]) {    
+  function fitMapToPolyline(data: IPharmacy[]) {
     let coords = [];
     for (let i = 0; i < data.length; i++) {
       coords.push({
@@ -70,8 +79,14 @@ export default function Map() {
   }
 
   const fetchNearbyPharmacies = (location: string): void => {
+    console.log(apiUrl + `api/pharmacies?location=${location}`);
+
     axios
-      .get(apiUrl + `api/pharmacies?location=${location}`)
+      .get(apiUrl + `api/pharmacies?location=${location}`, {
+        headers: {
+          "content-type": "application/json",
+        },
+      })
       .then((response) => {
         dispatch(savePharmacies(response.data));
         return response.data;
