@@ -22,7 +22,7 @@ import Map from "../components/Map";
 
 type RootStackParamList = {
   RegisterPage: undefined;
-  LoginPassword: {email: string};
+  LoginPassword: { email: string };
   LoginEmail: undefined;
 };
 
@@ -30,8 +30,8 @@ type Props = NativeStackScreenProps<RootStackParamList>;
 
 const LoginEmail = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-//  const userInfo = useAppSelector((state) => state.userInfo);
- 
+  //  const userInfo = useAppSelector((state) => state.userInfo);
+
   const [email, setEmail] = useState<string>("");
 
   const handleCheckEmail = () => {
@@ -41,7 +41,7 @@ const LoginEmail = ({ navigation }: Props) => {
         .then((response) => {
           console.log(response.data.message);
           dispatch(addEmail(email));
-          navigation.navigate("LoginPassword",{email});
+          navigation.navigate("LoginPassword", { email });
         })
         .catch((error) => console.log(error));
     } else {
@@ -67,27 +67,25 @@ const LoginEmail = ({ navigation }: Props) => {
               ...styles.ButtonTextContainer,
               backgroundColor: "#fff",
             }}
-            TextStyle={styles.ButtonRegister}
             PressableStyle={styles.Buttons}
             onPress={() => {
               navigation.navigate("RegisterPage");
             }}
-            buttonText="Register"
-          />
+          >
+            <Text style={styles.ButtonRegister}>Register</Text>{" "}
+          </AppButtons>
           <AppButtons
             ViewStyle={{
               ...styles.ButtonTextContainer,
               backgroundColor: "#000",
             }}
-            TextStyle={styles.ButtonContinue}
             PressableStyle={styles.Buttons}
             onPress={() => {
               handleCheckEmail();
-
-              // navigation.navigate("LoginPassword")}
             }}
-            buttonText="Continue"
-          />
+          >
+            <Text style={styles.ButtonContinue}>Continue</Text>
+          </AppButtons>
         </View>
         <Image
           style={styles.logoStyle}

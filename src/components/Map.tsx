@@ -8,15 +8,14 @@ import { apiUrl } from "@env";
 import { IPharmacy } from "../interfaces/pharmacy";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { savePharmacies } from "../redux/features/pharmaciesSlice";
+import { saveUserLocation } from "../redux/features/userLocationSlice";
 
 export default function Map() {
-  const [location, setLocation] = useState(null);
-  const [longitude, setLongitude] = useState<number>(0);
-  const [latitude, setLatitude] = useState<number>(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
   const pharmacies = useAppSelector((state) => state.pharmacies);
+  const userLocation = useAppSelector((state) => state.userLocation);
 
   useEffect(() => {
     (async () => {
@@ -26,8 +25,13 @@ export default function Map() {
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
-      setLongitude(location.coords.longitude);
-      setLatitude(location.coords.latitude);
+      dispatch(
+        saveUserLocation({
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+        })
+      );
+
       fetchNearbyPharmacies(
         encodeURIComponent(
           location.coords.latitude + "," + location.coords.longitude
@@ -41,7 +45,7 @@ export default function Map() {
 
   const _map = useRef<MapView | null>(null);
 
-  function fitMapToPolyline(data: IPharmacy[]) {
+  function fitMapToPolyline(data: IPharmacy[]) {    
     let coords = [];
     for (let i = 0; i < data.length; i++) {
       coords.push({
@@ -63,8 +67,6 @@ export default function Map() {
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
   }
 
   const fetchNearbyPharmacies = (location: string): void => {
@@ -92,8 +94,8 @@ export default function Map() {
         longitudeDelta: 0.0421,
       }}
       region={{
-        latitude: latitude,
-        longitude: longitude,
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
@@ -102,7 +104,7 @@ export default function Map() {
         return (
           <Marker
             key={index}
-            image={require("../assets/images/icons8-pharmacy-shop-48.png")}
+            image={require("../assets/images/icons8-pharmacy-shop-48-2.png")}
             style={styles.marker}
             coordinate={{
               latitude: pharmacy.location.lat,

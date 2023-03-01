@@ -4,16 +4,18 @@ import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import pharmaciesReducer from "./features/pharmaciesSlice";
 import userInfoReducer from "./features/userInfoSlice";
+import userLocationReducer from "./features/userLocationSlice";
 
 const reducer = combineReducers({
   userInfo: userInfoReducer,
   pharmacies: pharmaciesReducer,
+  userLocation: userLocationReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["userInfo", "pharmacies"],
+  whitelist: ["userInfo", "pharmacies", "userLocation"],
 };
 
 const persistor = persistReducer(persistConfig, reducer);

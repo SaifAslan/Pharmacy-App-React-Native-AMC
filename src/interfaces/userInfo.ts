@@ -14,3 +14,8 @@ export interface IUserInfoRegister {
   password: string;
   confirmPassword: string;
 }
+
+export interface IUserLocation {
+  latitude: number;
+  longitude: number;
+}

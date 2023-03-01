@@ -5,7 +5,7 @@ import { RootState } from "../store";
 const initialState: IPharmacy[] = [];
 
 export const pharmaciesSlice = createSlice({
-  name: "userInfo",
+  name: "pharmacies",
   initialState,
   reducers: {
     savePharmacies: (state, action: PayloadAction<IPharmacy[]>) => {

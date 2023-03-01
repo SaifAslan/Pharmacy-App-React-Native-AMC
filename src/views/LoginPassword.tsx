@@ -92,11 +92,11 @@ const LoginPassword = ({ route, navigation }: Props) => {
               ...styles.ButtonTextContainer,
               backgroundColor: "#000",
             }}
-            TextStyle={styles.ButtonContinue}
             PressableStyle={styles.Buttons}
             onPress={handleLogin}
-            buttonText="Continue"
-          />
+          >
+            <Text style={styles.ButtonContinue}>Continue</Text>
+          </AppButtons>
         </View>
         <Image
           style={styles.logoStyle}

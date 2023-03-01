@@ -114,13 +114,13 @@ const RegisterPage = ({ navigation }: Props) => {
               ...styles.ButtonTextContainer,
               backgroundColor: "#fff",
             }}
-            TextStyle={styles.ButtonContinue}
             PressableStyle={styles.Buttons}
             onPress={() => {
               handleSubmitUser();
             }}
-            buttonText="Register"
-          />
+          >
+            <Text style={styles.ButtonContinue}>Register</Text>
+          </AppButtons>
         </View>
       </AuthenticationFormContainer>
     </View>
