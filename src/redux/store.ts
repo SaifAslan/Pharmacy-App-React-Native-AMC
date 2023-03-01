@@ -1,26 +1,27 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import {persistReducer} from "redux-persist";
+import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
+import pharmaciesReducer from "./features/pharmaciesSlice";
 import userInfoReducer from "./features/userInfoSlice";
 
 const reducer = combineReducers({
   userInfo: userInfoReducer,
+  pharmacies: pharmaciesReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["userInfo"],
+  whitelist: ["userInfo", "pharmacies"],
 };
 
 const persistor = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: persistor,
-  middleware: [thunk]
+  middleware: [thunk],
 });
-
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
