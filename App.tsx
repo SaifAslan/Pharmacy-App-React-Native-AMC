@@ -9,8 +9,9 @@ import { store } from "./src/redux/store";
 import Home from "./src/views/Home";
 import Index from "./src/views/Index";
 import { PersistGate } from "redux-persist/integration/react";
-import {persistStore} from "redux-persist";
+import { persistStore } from "redux-persist";
 import Pharmacy from "./src/views/Pharmacy";
+import UserProfile from "./src/views/UserProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,23 +20,23 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="LoginEmail" component={LoginEmail} />
-          <Stack.Screen name="RegisterPage" component={RegisterPage} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="LoginPassword" component={LoginPassword} />
-          <Stack.Screen name="Pharmacy" component={Pharmacy} />
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="UserProfile" component={UserProfile} />
 
+            <Stack.Screen name="Home" component={Home} />
 
-          {/* <Stack.Screen name="CSR" component={CSR} /> */}
-        </Stack.Navigator>
-        <Index />
-      </NavigationContainer>
+            <Stack.Screen name="LoginEmail" component={LoginEmail} />
+            <Stack.Screen name="RegisterPage" component={RegisterPage} />
+            <Stack.Screen name="LoginPassword" component={LoginPassword} />
+            <Stack.Screen name="Pharmacy" component={Pharmacy} />
+          </Stack.Navigator>
+          <Index />
+        </NavigationContainer>
       </PersistGate>
     </Provider>
   );

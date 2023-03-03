@@ -39,7 +39,7 @@ const LoginEmail = ({ navigation }: Props) => {
       axios
         .post(apiUrl + "authentication/login-check-email", { email: email })
         .then((response) => {
-          console.log(response.data.message);
+          // console.log(response.data.message);
           dispatch(addEmail(email));
           navigation.navigate("LoginPassword", { email });
         })

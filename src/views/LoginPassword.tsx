@@ -32,7 +32,7 @@ const LoginPassword = ({ route, navigation }: Props) => {
   const { email } = route.params;
   const dispatch = useDispatch();
   const userInfo = useAppSelector((state) => state.userInfo);
-  console.log(userInfo);
+  // console.log(userInfo);
 
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
@@ -55,7 +55,6 @@ const LoginPassword = ({ route, navigation }: Props) => {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log(typeof response.data.user);
           dispatch(
             login({
               name: response.data.user.name,

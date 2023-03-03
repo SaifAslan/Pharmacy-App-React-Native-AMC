@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     width: "100%",
     padding: 13,
+    paddingHorizontal:0,
     flexDirection:"column"
   },
   reviewHeader: {
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     marginEnd:6
   },
   reviewText:{
-    fontSize:10,
+    fontSize:12,
     color:"white",
     marginTop:8
   }

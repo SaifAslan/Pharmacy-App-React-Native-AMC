@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
@@ -18,7 +18,7 @@ import { saveUserLocation } from "../redux/features/userLocationSlice";
 
 export default function Map() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  const [loading, setLoading] = useState(false);
   const _map = useRef<MapView | null>(null);
   const dispatch = useAppDispatch();
   const pharmacies = useAppSelector((state) => state.pharmacies);
@@ -27,17 +27,32 @@ export default function Map() {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({
+        accuracy:
+          Platform.OS === "android"
+            ? Location.Accuracy.Low
+            : Location.Accuracy.Lowest,
+      });
+
       dispatch(
         saveUserLocation({
           longitude: location.coords.longitude,
           latitude: location.coords.latitude,
         })
       );
+
+      // fetchNearbyPharmacies(
+      //   encodeURIComponent(
+      //     //@ts-ignore
+      //     location.coords.latitude + "," + location.coords.longitude
+      //   )
+      // );
+
       fetchNearbyPharmaciesCB(location);
     })();
   }, []);
@@ -79,14 +94,9 @@ export default function Map() {
   }
 
   const fetchNearbyPharmacies = (location: string): void => {
-    console.log(apiUrl + `api/pharmacies?location=${location}`);
-
+    // console.log(apiUrl + `api/pharmacies?location=${location}`);
     axios
-      .get(apiUrl + `api/pharmacies?location=${location}`, {
-        headers: {
-          "content-type": "application/json",
-        },
-      })
+      .get(apiUrl + `api/pharmacies?location=${location}`)
       .then((response) => {
         dispatch(savePharmacies(response.data));
         return response.data;

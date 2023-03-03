@@ -1,4 +1,3 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
@@ -26,6 +25,7 @@ const Pharmacy = ({ route }) => {
   const [pharmacyDetails, setPharmacyDetails] = useState<
     IPharmacyDetails | undefined
   >();
+
   const locationUrl = useLocationUrl(
     route.params?.pharmacy.location.lat,
     route.params?.pharmacy.location.lng
@@ -44,7 +44,6 @@ const Pharmacy = ({ route }) => {
       })
       .catch((error) => console.log(error));
   };
-  console.log();
 
   return (
     <View style={styles.container}>
@@ -57,9 +56,9 @@ const Pharmacy = ({ route }) => {
         <Image
           style={{
             ...styles.icon,
-            backgroundColor: pharmacyDetails?.icon_background_color,
           }}
-          source={{ uri: route.params.pharmacy.icon }}
+          // source={{ uri: route.params.pharmacy.icon }}
+          source={require("../assets/images/pharmacy.png")}
         />
       </View>
 
@@ -88,9 +87,9 @@ const Pharmacy = ({ route }) => {
             </Text>
           )}
         </View>
-        <Text style={styles.name}>{route.params?.pharmacy?.name}</Text>
+        <Text  numberOfLines={2} style={styles.name}>{route.params?.pharmacy?.name}</Text>
         <View style={styles.addressAndLocation}>
-          <Text style={styles.address}>
+          <Text numberOfLines={2} style={styles.address}>
             {pharmacyDetails?.formatted_address}
           </Text>
           <AppButtons
@@ -158,9 +157,11 @@ const Pharmacy = ({ route }) => {
             </View>
             <FlatList
               style={styles.reviewsList}
-              data={pharmacyDetails?.reviews || []}
+              data={pharmacyDetails.reviews || []}
               renderItem={(itemData: ListRenderItemInfo<IReview>) => {
-                return <ReviewCard review={itemData.item} />;
+                return (
+                    <ReviewCard review={itemData.item} />
+                );
               }}
             />
           </View>
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#6FB98F",
   },
   iconContainer: {
-    top: 80,
+    top: 100,
     left: 0,
     right: 0,
     borderRadius: 100,
@@ -193,11 +194,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     zIndex: 1,
   },
-
   icon: {
     borderRadius: 100,
     width: 164,
     height: 164,
+    // transform:[{scale:0.5}]
+    backgroundColor: "white",
   },
   mainContainer: {
     flex: 1,
@@ -229,6 +231,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     marginTop: 10,
+    textAlign:"center"
   },
   addressAndLocation: {
     width: "100%",
@@ -275,6 +278,7 @@ const styles = StyleSheet.create({
   },
   reviewsMainContainer: {
     width: "100%",
+    flex:1
   },
   reviewsHeaderContainer: {
     borderBottomColor: "#6FB98F",
