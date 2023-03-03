@@ -26,10 +26,8 @@ export default function App() {
               headerShown: false,
             }}
           >
-            <Stack.Screen name="UserProfile" component={UserProfile} />
-
             <Stack.Screen name="Home" component={Home} />
-
+            <Stack.Screen name="UserProfile" component={UserProfile} />
             <Stack.Screen name="LoginEmail" component={LoginEmail} />
             <Stack.Screen name="RegisterPage" component={RegisterPage} />
             <Stack.Screen name="LoginPassword" component={LoginPassword} />

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
@@ -16,13 +16,26 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { savePharmacies } from "../redux/features/pharmaciesSlice";
 import { saveUserLocation } from "../redux/features/userLocationSlice";
 
-export default function Map() {
+interface Props {
+  activePharmacy: number;
+  setActivePharmacy: (activePharmacy: number) => void;
+}
+
+export default function Map({
+  activePharmacy,
+  setActivePharmacy,
+}: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const _map = useRef<MapView | null>(null);
+  const _map = useRef<MapView>();
   const dispatch = useAppDispatch();
   const pharmacies = useAppSelector((state) => state.pharmacies);
   const userLocation = useAppSelector((state) => state.userLocation);
+
+
+  const handleUpdateActivePharmacy = (index: number) => {
+    setActivePharmacy(index);
+  };
 
   useEffect(() => {
     (async () => {
@@ -127,15 +140,27 @@ export default function Map() {
     >
       {pharmacies.map((pharmacy, index) => {
         return (
-          <Marker
+          <Pressable
             key={index}
-            image={require("../assets/images/icons8-pharmacy-shop-48-2.png")}
-            style={styles.marker}
-            coordinate={{
-              latitude: pharmacy.location.lat,
-              longitude: pharmacy.location.lng,
-            }}
-          />
+            onPress={() => handleUpdateActivePharmacy(index)}
+          >
+            <Marker
+              image={
+                activePharmacy == index
+                  ? require("../assets/images/icons8-pharmacy-shop-48-active.png")
+                  : require("../assets/images/icons8-pharmacy-shop-48-2.png")
+              }
+              style={{
+                ...styles.marker,
+                transform:
+                  activePharmacy == index ? [{ scale: 2.5 }] : [{ scale: 2 }],
+              }}
+              coordinate={{
+                latitude: pharmacy.location.lat,
+                longitude: pharmacy.location.lng,
+              }}
+            />
+          </Pressable>
         );
       })}
     </MapView>
@@ -156,6 +181,6 @@ const styles = StyleSheet.create({
     flex: 4,
   },
   marker: {
-    transform: [{ scale: 2 }],
+    // transform: [{ scale: 2 }],
   },
 });

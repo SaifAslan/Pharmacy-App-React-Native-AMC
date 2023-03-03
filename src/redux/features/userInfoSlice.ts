@@ -19,7 +19,7 @@ export const userInfoSlice = createSlice({
     },
     logout: (state) => {
       //@ts-ignore
-     return state = this.initialState;
+     return state = initialState;
     },
     addEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;

@@ -10,13 +10,14 @@ import AppButtons from "./AppButtons";
 interface Props {
   pharmacy: IPharmacy;
   activePharmacy: number;
+  index: number;
 }
 
 type RootStackParamList = {
   Pharmacy: { pharmacy: IPharmacy };
 };
 
-const PharmacyCard = ({  pharmacy,activePharmacy }: Props) => {
+const PharmacyCard = ({ index, pharmacy, activePharmacy }: Props) => {
   const userLocation = useAppSelector((state) => state.userLocation);
   const locationUrl = useLocationUrl(
     pharmacy.location.lat,
@@ -35,9 +36,17 @@ const PharmacyCard = ({  pharmacy,activePharmacy }: Props) => {
     [pharmacy.location]
   );
   return (
-    <View style={styles.container}>
+    <View
+      style={
+        activePharmacy !== index
+          ? styles.container
+          : { ...styles.container, backgroundColor: "black" }
+      }
+    >
       <View style={styles.leftContainer}>
-        <Text numberOfLines={1} style={styles.name}>{pharmacy.name}</Text>
+        <Text numberOfLines={1} style={styles.name}>
+          {pharmacy.name}
+        </Text>
         <View style={styles.infoContainer}>
           <Text
             style={
@@ -81,9 +90,9 @@ export default PharmacyCard;
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 7,
+    padding: 7,
     flexDirection: "row",
-    height:60
+    height: 60,
   },
   leftContainer: {
     flex: 4,

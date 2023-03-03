@@ -1,29 +1,77 @@
-import React from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
+  Image,
   ListRenderItemInfo,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import AppButtons from "../components/AppButtons";
 import Map from "../components/Map";
 import PharmacyCard from "../components/PharmacyCard";
+import SideNav from "../components/SideNav";
 import { IPharmacy } from "../interfaces/pharmacy";
-import { useAppSelector } from "../redux/hooks";
+import { logout } from "../redux/features/userInfoSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
-export const Home = () => {
-  const [activePharmacy, setActivePharmacy] = React.useState(0);
+type RootStackParamList = {
+  RegisterPage: undefined;
+  LoginPassword: { email: string };
+  LoginEmail: undefined;
+  UserProfile: undefined;
+};
+
+type Props = NativeStackScreenProps<RootStackParamList>;
+
+export const Home = ({ navigation }: Props) => {
+  const [activePharmacy, setActivePharmacy] = useState(0);
+  const [showNav, setShowNav] = useState(false);
+
+  const dispatch = useAppDispatch();
+
   const pharmacies = useAppSelector((state) => state.pharmacies);
+  
   const flatListRef = React.useRef();
-
   const handlePharmacyClick = (pharmacyIndex: number) => {
     setActivePharmacy(pharmacyIndex);
   };
 
+  useEffect(() => {
+    flatListRef?.current?.scrollToIndex({
+      index: typeof activePharmacy == "number" ? activePharmacy : 0,
+    });
+  }, [activePharmacy]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <View style={styles.container}>
-      <Map />
+      <Pressable onPress={() => setShowNav(true)} style={styles.menuIcon}>
+        <Image source={require("../assets/images/Menu.png")} />
+      </Pressable>
+      <SideNav showNav={showNav} setShowNav={setShowNav}>
+        <AppButtons
+          ViewStyle={{}}
+          PressableStyle={{ marginBottom: 14 }}
+          onPress={() => navigation.navigate("UserProfile")}
+          Content={<Text style={styles.profileText}>Profile</Text>}
+        />
+        <AppButtons
+          ViewStyle={{}}
+          PressableStyle={{}}
+          onPress={handleLogout}
+          Content={<Text style={styles.profileText}>Logout</Text>}
+        />
+      </SideNav>
+      <Map
+        activePharmacy={activePharmacy}
+        setActivePharmacy={setActivePharmacy}
+      />
       <View style={styles.bottomContainer}>
         <Text style={styles.title}>Nearby pharmacies</Text>
         <FlatList
@@ -39,8 +87,8 @@ export const Home = () => {
             return (
               <Pressable onPress={() => handlePharmacyClick(itemData.index)}>
                 <PharmacyCard
+                  index={itemData.index}
                   activePharmacy={activePharmacy}
-                  scrollToPharmacy={flatListRef.current.scrollToIndex}
                   pharmacy={itemData.item}
                 />
               </Pressable>
@@ -65,16 +113,27 @@ const styles = StyleSheet.create({
     flex: 3,
     width: "100%",
     backgroundColor: "#021C1E",
-    paddingHorizontal: 20,
+    paddingHorizontal: 13,
     paddingVertical: 17,
   },
   title: {
     color: "white",
     fontSize: 21,
     fontWeight: "400",
+    marginBottom: 10,
   },
   pharmaciesContainer: {
     flex: 1,
     width: "100%",
+  },
+  menuIcon: {
+    position: "absolute",
+    start: 10,
+    top: 40,
+    zIndex: 1,
+  },
+  profileText: {
+    color: "#6FB98F",
+    fontSize: 30,
   },
 });
