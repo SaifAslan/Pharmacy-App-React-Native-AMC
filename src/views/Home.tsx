@@ -1,3 +1,4 @@
+import { useNetInfo } from "@react-native-community/netinfo";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
@@ -22,6 +23,7 @@ type RootStackParamList = {
   LoginPassword: { email: string };
   LoginEmail: undefined;
   UserProfile: undefined;
+  Home: undefined;
 };
 
 type Props = NativeStackScreenProps<RootStackParamList>;
@@ -30,10 +32,12 @@ export const Home = ({ navigation }: Props) => {
   const [activePharmacy, setActivePharmacy] = useState(0);
   const [showNav, setShowNav] = useState(false);
 
+  const netInfo = useNetInfo();
+
   const dispatch = useAppDispatch();
 
   const pharmacies = useAppSelector((state) => state.pharmacies);
-  
+
   const flatListRef = React.useRef();
   const handlePharmacyClick = (pharmacyIndex: number) => {
     setActivePharmacy(pharmacyIndex);
@@ -73,29 +77,45 @@ export const Home = ({ navigation }: Props) => {
         setActivePharmacy={setActivePharmacy}
       />
       <View style={styles.bottomContainer}>
-        <Text style={styles.title}>Nearby pharmacies</Text>
-        <FlatList
-          getItemLayout={(data, index) => ({
-            length: pharmacies.length,
-            offset: 60 * index,
-            index,
-          })}
-          ref={flatListRef}
-          data={pharmacies}
-          style={styles.pharmaciesContainer}
-          renderItem={(itemData: ListRenderItemInfo<IPharmacy>) => {
-            return (
-              <Pressable onPress={() => handlePharmacyClick(itemData.index)}>
-                <PharmacyCard
-                  index={itemData.index}
-                  activePharmacy={activePharmacy}
-                  pharmacy={itemData.item}
-                />
-              </Pressable>
-            );
-          }}
-          keyExtractor={(item) => item.place_id}
-        />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Text style={styles.title}>Nearby pharmacies</Text>
+       
+          {!netInfo.isConnected && (
+            <Text
+              style={{
+                ...styles.title,
+                fontSize: 16,
+                color: "red",
+              }}
+            >
+               {" OFFLINE"}
+            </Text>
+          )}
+        </View>
+        {pharmacies.length > 0 && (
+          <FlatList
+            getItemLayout={(data, index) => ({
+              length: pharmacies.length,
+              offset: 60 * index,
+              index,
+            })}
+            ref={flatListRef}
+            data={pharmacies}
+            style={styles.pharmaciesContainer}
+            renderItem={(itemData: ListRenderItemInfo<IPharmacy>) => {
+              return (
+                <Pressable onPress={() => handlePharmacyClick(itemData.index)}>
+                  <PharmacyCard
+                    index={itemData.index}
+                    activePharmacy={activePharmacy}
+                    pharmacy={itemData.item}
+                  />
+                </Pressable>
+              );
+            }}
+            keyExtractor={(item) => item.place_id}
+          />
+        )}
       </View>
     </View>
   );

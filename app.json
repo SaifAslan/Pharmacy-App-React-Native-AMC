@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -19,18 +19,23 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "infoPlist": {
-      }
+      "infoPlist": {},
+      "bundleIdentifier": "com.saifaslan24.PharmacyAppAMCProject"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.saifaslan24.PharmacyAppAMCProject"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a0335650-16ef-4816-af32-ff2a92adad46"
+      }
     }
-
   }
 }

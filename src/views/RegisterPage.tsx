@@ -47,7 +47,7 @@ const RegisterPage = ({ navigation }: Props) => {
           navigation.navigate("LoginEmail");
         })
         .catch((error) => {
-          console.log(error);
+          Alert.alert(error.response.data.message);
         });
     } else {
       Alert.alert("Error", "Passwords don't match");
@@ -97,11 +97,13 @@ const RegisterPage = ({ navigation }: Props) => {
           placeholder="Password"
           textContentType="password"
           style={SharedStyles.AppInput}
+          secureTextEntry={true}
         />
         <TextInput
           onChangeText={(value) =>
             handleUserRegisteredInfo("confirmPassword", value)
           }
+          secureTextEntry={true}
           value={userRegisteredInfo.confirmPassword}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="Re-enter password"

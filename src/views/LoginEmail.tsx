@@ -9,6 +9,7 @@ import {
   Button,
   Pressable,
   Image,
+  Alert,
 } from "react-native";
 import AppButtons from "../components/AppButtons";
 import AuthenticationFormContainer from "../components/AuthenticationFormContainer";
@@ -43,7 +44,9 @@ const LoginEmail = ({ navigation }: Props) => {
           dispatch(addEmail(email));
           navigation.navigate("LoginPassword", { email });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          Alert.alert(error.response.data.message);
+        });
     } else {
       alert("Please enter a valid email");
     }
@@ -59,7 +62,7 @@ const LoginEmail = ({ navigation }: Props) => {
           style={SharedStyles.AppInput}
           textContentType="emailAddress"
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text.toLowerCase())}
         />
         <View style={styles.ButtonsContainer}>
           <AppButtons

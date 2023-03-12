@@ -13,7 +13,6 @@ import {
 import AppButtons from "../components/AppButtons";
 import AuthenticationFormContainer from "../components/AuthenticationFormContainer";
 import SharedStyles from "../Styles/SharedStyles";
-import validator from "validator";
 import axios from "axios";
 //@ts-ignore
 import { apiUrl } from "@env";
@@ -66,9 +65,11 @@ const LoginPassword = ({ route, navigation }: Props) => {
           );
           navigation.navigate("Home");
         } else {
+          
           Alert.alert("Error", response.data.message);
         }
-      });
+      })
+      .catch((error) => Alert.alert(error.response.data.message));
   };
 
   return (
@@ -76,6 +77,7 @@ const LoginPassword = ({ route, navigation }: Props) => {
       <AuthenticationFormContainer>
         <Text style={styles.title}>enter your password</Text>
         <TextInput
+          secureTextEntry={true}
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           placeholder="password"
           textContentType="password"
@@ -94,7 +96,7 @@ const LoginPassword = ({ route, navigation }: Props) => {
             PressableStyle={styles.Buttons}
             onPress={handleLogin}
             Content={<Text style={styles.ButtonContinue}>Continue</Text>}
-            />           
+          />
         </View>
         <Image
           style={styles.logoStyle}

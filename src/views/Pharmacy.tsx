@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   Linking,
@@ -42,7 +43,7 @@ const Pharmacy = ({ route }) => {
         setPharmacyDetails(response.data);
         return response.data;
       })
-      .catch((error) => console.log(error));
+      .catch((error) => Alert.alert(error.response.data.message));
   };
 
   return (
@@ -87,7 +88,9 @@ const Pharmacy = ({ route }) => {
             </Text>
           )}
         </View>
-        <Text  numberOfLines={2} style={styles.name}>{route.params?.pharmacy?.name}</Text>
+        <Text numberOfLines={2} style={styles.name}>
+          {route.params?.pharmacy?.name}
+        </Text>
         <View style={styles.addressAndLocation}>
           <Text numberOfLines={2} style={styles.address}>
             {pharmacyDetails?.formatted_address}
@@ -159,9 +162,7 @@ const Pharmacy = ({ route }) => {
               style={styles.reviewsList}
               data={pharmacyDetails.reviews || []}
               renderItem={(itemData: ListRenderItemInfo<IReview>) => {
-                return (
-                    <ReviewCard review={itemData.item} />
-                );
+                return <ReviewCard review={itemData.item} />;
               }}
             />
           </View>
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     marginTop: 10,
-    textAlign:"center"
+    textAlign: "center",
   },
   addressAndLocation: {
     width: "100%",
@@ -278,7 +279,7 @@ const styles = StyleSheet.create({
   },
   reviewsMainContainer: {
     width: "100%",
-    flex:1
+    flex: 1,
   },
   reviewsHeaderContainer: {
     borderBottomColor: "#6FB98F",

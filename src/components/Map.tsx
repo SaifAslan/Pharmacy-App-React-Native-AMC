@@ -5,7 +5,14 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import axios from "axios";
@@ -21,17 +28,13 @@ interface Props {
   setActivePharmacy: (activePharmacy: number) => void;
 }
 
-export default function Map({
-  activePharmacy,
-  setActivePharmacy,
-}: Props) {
+export default function Map({ activePharmacy, setActivePharmacy }: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const _map = useRef<MapView>();
   const dispatch = useAppDispatch();
   const pharmacies = useAppSelector((state) => state.pharmacies);
   const userLocation = useAppSelector((state) => state.userLocation);
-
 
   const handleUpdateActivePharmacy = (index: number) => {
     setActivePharmacy(index);
@@ -59,16 +62,13 @@ export default function Map({
         })
       );
 
-      // fetchNearbyPharmacies(
-      //   encodeURIComponent(
-      //     //@ts-ignore
-      //     location.coords.latitude + "," + location.coords.longitude
-      //   )
-      // );
-
       fetchNearbyPharmaciesCB(location);
     })();
   }, []);
+
+  useEffect(() => {
+    pharmacies.length > 0 && fitMapToPolyline(pharmacies);
+  }, [pharmacies]);
 
   const fetchNearbyPharmaciesCB = useCallback(
     (location: {}) => {
@@ -91,14 +91,15 @@ export default function Map({
       });
     }
     //@ts-ignore
-    _map.current.fitToCoordinates(coords, {
-      edgePadding: {
-        top: 20,
-        right: 20,
-        bottom: 20,
-        left: 20,
-      },
-    });
+    coords.length > 0 &&
+      _map.current.fitToCoordinates(coords, {
+        edgePadding: {
+          top: 20,
+          right: 20,
+          bottom: 20,
+          left: 20,
+        },
+      });
   }
 
   let text = "Waiting..";
@@ -114,8 +115,7 @@ export default function Map({
         dispatch(savePharmacies(response.data));
         return response.data;
       })
-      .then((data) => fitMapToPolyline(data))
-      .catch((error) => console.log(error));
+      .catch((error) => Alert.alert(error.response.data.message));
   };
 
   return (
