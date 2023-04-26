@@ -30,9 +30,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "LoginPassword">;
 const LoginPassword = ({ route, navigation }: Props) => {
   const { email } = route.params;
   const dispatch = useDispatch();
-  const userInfo = useAppSelector((state) => state.userInfo);
-  // console.log(userInfo);
-
+  
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
     password: string;

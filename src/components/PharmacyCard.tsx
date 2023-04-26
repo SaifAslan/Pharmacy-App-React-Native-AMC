@@ -6,25 +6,34 @@ import { useAppSelector } from "../redux/hooks";
 import { calculateDistance } from "../utils/calculateDistance";
 import useLocationUrl from "../utils/useLocationUrl";
 import AppButtons from "./AppButtons";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-interface Props {
+type Props = {
   pharmacy: IPharmacy;
   activePharmacy: number;
   index: number;
-}
+};
 
 type RootStackParamList = {
   Pharmacy: { pharmacy: IPharmacy };
+  Home: undefined;
 };
 
-const PharmacyCard = ({ index, pharmacy, activePharmacy }: Props) => {
+type ProfileProps = NativeStackNavigationProp<RootStackParamList, "Home"> & Props;
+
+const PharmacyCard = ({
+  index,
+  pharmacy,
+  activePharmacy,
+}: Props) => {
   const userLocation = useAppSelector((state) => state.userLocation);
   const locationUrl = useLocationUrl(
     pharmacy.location.lat,
-    pharmacy.location.lng
+    pharmacy.location.lng,
+    pharmacy.name
   );
-  const navigation = useNavigation();
-
+const navigation = useNavigation<ProfileProps>()
+  
   let distance = useMemo(
     () =>
       calculateDistance(

@@ -27,16 +27,15 @@ export default function App() {
               headerShown: false,
             }}
           >
-
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="UserProfile" component={UserProfile} />
             <Stack.Screen name="LoginEmail" component={LoginEmail} />
             <Stack.Screen name="RegisterPage" component={RegisterPage} />
+            {/* @ts-ignore */}
             <Stack.Screen name="LoginPassword" component={LoginPassword} />
+            {/* @ts-ignore */}
             <Stack.Screen name="Pharmacy" component={Pharmacy} />
             <Stack.Screen name="NotConnected404" component={NotConnected404} />
-
-
           </Stack.Navigator>
           <Index />
         </NavigationContainer>

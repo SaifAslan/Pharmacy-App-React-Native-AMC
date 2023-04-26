@@ -16,25 +16,26 @@ import { apiUrl } from "@env";
 import AppButtons from "../components/AppButtons";
 import useLocationUrl from "../utils/useLocationUrl";
 import ReviewCard from "../components/ReviewCard";
+import { RouteProp } from "@react-navigation/native";
 
-// interface RootStackParamList {
-//   Pharmacy: { pharmacy: IPharmacy };
-// }
-// type Props = NativeStackScreenProps<RootStackParamList>;
+interface Props {
+  route: RouteProp<{ params: { pharmacy: IPharmacy } }, "params">;
+}
 
-const Pharmacy = ({ route }) => {
+const Pharmacy: React.FC<Props> = ({ route }:Props) => {
   const [pharmacyDetails, setPharmacyDetails] = useState<
     IPharmacyDetails | undefined
   >();
 
   const locationUrl = useLocationUrl(
     route.params?.pharmacy.location.lat,
-    route.params?.pharmacy.location.lng
+    route.params?.pharmacy.location.lng,
+    route.params?.pharmacy.name
   );
 
   useEffect(() => {
     fetchPharmacyData();
-  }, [route.params?.pharmacy?.placeid]);
+  }, [route.params?.pharmacy?.place_id]);
 
   const fetchPharmacyData = (): void => {
     axios

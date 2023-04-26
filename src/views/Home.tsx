@@ -44,6 +44,7 @@ export const Home = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
+    //@ts-ignore
     flatListRef?.current?.scrollToIndex({
       index: typeof activePharmacy == "number" ? activePharmacy : 0,
     });
@@ -72,6 +73,13 @@ export const Home = ({ navigation }: Props) => {
           Content={<Text style={styles.profileText}>Logout</Text>}
         />
       </SideNav>
+      {/* <AnimatedLoader
+      visible={visible}
+      overlayColor="rgba(255,255,255,0.75)"
+      animationStyle={styles.lottie}
+      speed={1}>
+      <Text>Doing something...</Text>
+    </AnimatedLoader> */}
       <Map
         activePharmacy={activePharmacy}
         setActivePharmacy={setActivePharmacy}
@@ -99,6 +107,7 @@ export const Home = ({ navigation }: Props) => {
               offset: 60 * index,
               index,
             })}
+            //@ts-ignore
             ref={flatListRef}
             data={pharmacies}
             style={styles.pharmaciesContainer}

@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -31,16 +31,15 @@ type Props = NativeStackScreenProps<RootStackParamList>;
 
 const LoginEmail = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  //  const userInfo = useAppSelector((state) => state.userInfo);
 
   const [email, setEmail] = useState<string>("");
+
 
   const handleCheckEmail = () => {
     if (validator.isEmail(email)) {
       axios
         .post(apiUrl + "authentication/login-check-email", { email: email })
         .then((response) => {
-          // console.log(response.data.message);
           dispatch(addEmail(email));
           navigation.navigate("LoginPassword", { email });
         })

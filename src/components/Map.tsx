@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -10,8 +9,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
-  View,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
@@ -30,7 +27,6 @@ interface Props {
 
 export default function Map({ activePharmacy, setActivePharmacy }: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const _map = useRef<MapView>();
   const dispatch = useAppDispatch();
   const pharmacies = useAppSelector((state) => state.pharmacies);
@@ -92,6 +88,7 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
     }
     //@ts-ignore
     coords.length > 0 &&
+    //@ts-ignore
       _map.current.fitToCoordinates(coords, {
         edgePadding: {
           top: 20,
@@ -108,7 +105,6 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
   }
 
   const fetchNearbyPharmacies = (location: string): void => {
-    // console.log(apiUrl + `api/pharmacies?location=${location}`);
     axios
       .get(apiUrl + `api/pharmacies?location=${location}`)
       .then((response) => {
@@ -119,8 +115,8 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
   };
 
   return (
-    // <View style={styles.container}>
     <MapView
+    //@ts-ignore
       ref={_map}
       showsUserLocation={true}
       showsCompass={true}
@@ -164,10 +160,8 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
         );
       })}
     </MapView>
-    // </View>
   );
 }
-//create our styling code:
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -176,11 +170,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   map: {
-    // ...StyleSheet.absoluteFillObject,
     width: "100%",
     flex: 4,
   },
   marker: {
-    // transform: [{ scale: 2 }],
   },
 });
