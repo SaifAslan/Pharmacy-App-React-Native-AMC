@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#6FB98F",
-    fontWeight: "medium",
+    fontWeight: "normal",
     fontSize: 21,
   },
   buttonPressable: {

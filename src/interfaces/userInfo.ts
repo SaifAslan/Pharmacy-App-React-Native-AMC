@@ -4,6 +4,7 @@ export interface IUserInfo {
   surname: string;
   accessToken: string;
   phone: string;
+  image?: string;
 }
 
 export interface IUserInfoRegister {
@@ -13,6 +14,7 @@ export interface IUserInfoRegister {
   phone: string;
   password: string;
   confirmPassword: string;
+  image?: string;
 }
 
 export interface IUserLocation {
