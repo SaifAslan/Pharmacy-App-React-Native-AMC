@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginEmail from "./src/views/LoginEmail";
 import LoginPassword from "./src/views/LoginPassword";
 import RegisterPage from "./src/views/RegisterPage";
-
 import { Provider } from "react-redux";
 import { store } from "./src/redux/store";
 import Home from "./src/views/Home";
