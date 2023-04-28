@@ -33,16 +33,15 @@ const RegisterPage = ({ navigation }: Props) => {
   };
 
   const passwordsMatch = (): boolean => {
+    //checks if passwords matches
     return userRegisteredInfo.password === userRegisteredInfo.confirmPassword;
   };
 
-  const handleSubmitUser = () => {
+  const handleSubmitUser = (): void => { 
+    //handler function to check if the user passwords matches then to create a new user
     if (passwordsMatch()) {
       axios
         .post(apiUrl + "authentication/create-user", userRegisteredInfo)
-        .then((response) => {
-          console.info("Please login using your details!");
-        })
         .then(() => {
           navigation.navigate("LoginEmail");
         })

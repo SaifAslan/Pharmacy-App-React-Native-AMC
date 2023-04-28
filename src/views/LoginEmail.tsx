@@ -35,11 +35,15 @@ const LoginEmail = ({ navigation }: Props) => {
   const [email, setEmail] = useState<string>("");
 
 
-  const handleCheckEmail = () => {
+  const handleCheckEmail = () => { 
+    //This handler function is to first check that the email is valid then it posts
+    //the email to the backend
     if (validator.isEmail(email)) {
       axios
         .post(apiUrl + "authentication/login-check-email", { email: email })
         .then((response) => {
+          //when the email is valid then save in the redux store then direct to
+          //the password screen with the email is a prop
           dispatch(addEmail(email));
           navigation.navigate("LoginPassword", { email });
         })

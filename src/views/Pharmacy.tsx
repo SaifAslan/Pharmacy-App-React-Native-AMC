@@ -27,6 +27,7 @@ const Pharmacy: React.FC<Props> = ({ route }:Props) => {
     IPharmacyDetails | undefined
   >();
 
+  //getting the user's location url from the user location hook
   const locationUrl = useLocationUrl(
     route.params?.pharmacy.location.lat,
     route.params?.pharmacy.location.lng,
@@ -34,15 +35,17 @@ const Pharmacy: React.FC<Props> = ({ route }:Props) => {
   );
 
   useEffect(() => {
+    //calling the fetchPharmacy function whenerver the id of the pharmacy changes
     fetchPharmacyData();
   }, [route.params?.pharmacy?.place_id]);
 
   const fetchPharmacyData = (): void => {
+    //fetching the pharmacy data with Google's palce id
     axios
       .get(apiUrl + `api/pharmacy?placeid=${route.params.pharmacy.place_id}`)
       .then((response) => {
+        //saving the response in the screen's (component's) state
         setPharmacyDetails(response.data);
-        return response.data;
       })
       .catch((error) => Alert.alert(error.response.data.message));
   };

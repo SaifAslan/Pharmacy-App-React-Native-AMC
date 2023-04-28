@@ -1,3 +1,5 @@
+// a function that calculates the distance between two points
+
 export const calculateDistance = (
   lat1: number,
   lon1: number,

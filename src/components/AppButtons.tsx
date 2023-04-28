@@ -16,7 +16,7 @@ type Props = {
   // children: React.ReactNode;
   Content: React.ReactNode
 };
-
+//this components creates a button that has cusmization 
 const AppButtons: React.FC<Props> = ({
   PressableStyle,
   ViewStyle,

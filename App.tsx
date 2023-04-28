@@ -17,10 +17,15 @@ import NotConnected404 from "./src/views/NotConnected404";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  //devining redux persistent store
   let persistor = persistStore(store);
+
   return (
+    //wrapping the app with redux store to provide access for the store in the app 
     <Provider store={store}>
+    {/* wrapping the app with redux persis wrapper to persist the redux data in async storage */}
       <PersistGate loading={null} persistor={persistor}>
+        {/* defining and setting up the app navigation */}
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{

@@ -1,24 +1,14 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  Pressable,
-  Image,
-  Alert,
-} from "react-native";
-import AppButtons from "../components/AppButtons";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
 import AuthenticationFormContainer from "../components/AuthenticationFormContainer";
-import SharedStyles from "../Styles/SharedStyles";
 import axios from "axios";
+import AppButtons from "../components/AppButtons";
+import SharedStyles from "../Styles/SharedStyles";
 //@ts-ignore
 import { apiUrl } from "@env";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/features/userInfoSlice";
-import { useAppSelector } from "../redux/hooks";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
   Home: undefined;
@@ -30,7 +20,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "LoginPassword">;
 const LoginPassword = ({ route, navigation }: Props) => {
   const { email } = route.params;
   const dispatch = useDispatch();
-  
+
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
     password: string;
@@ -52,6 +42,8 @@ const LoginPassword = ({ route, navigation }: Props) => {
       })
       .then((response) => {
         if (response.status === 200) {
+          //when the email and password are valid then save the user information in the
+          //redux store then direct to the home screen
           dispatch(
             login({
               name: response.data.user.name,
@@ -61,9 +53,9 @@ const LoginPassword = ({ route, navigation }: Props) => {
               surname: response.data.user.surname,
             })
           );
-          navigation.navigate("Home");
+          navigation.push("Home");
         } else {
-          
+          // this to handle the validation errors
           Alert.alert("Error", response.data.message);
         }
       })

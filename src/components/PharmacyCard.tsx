@@ -35,6 +35,7 @@ const PharmacyCard = ({
 const navigation = useNavigation<ProfileProps>()
   
   let distance = useMemo(
+    //calculate the distance between the user location and the pharmacy
     () =>
       calculateDistance(
         pharmacy.location.lat,

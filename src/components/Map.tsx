@@ -33,17 +33,21 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
   const userLocation = useAppSelector((state) => state.userLocation);
 
   const handleUpdateActivePharmacy = (index: number) => {
+    // changing the active pharmacy when being clicked on the map
     setActivePharmacy(index);
   };
 
   useEffect(() => {
     (async () => {
+      //requesting access to location from the user 
       let { status } = await Location.requestForegroundPermissionsAsync();
 
+      //if not granted then set an error message
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
+      //if granted then get the user location
       let location = await Location.getCurrentPositionAsync({
         accuracy:
           Platform.OS === "android"
@@ -51,22 +55,27 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
             : Location.Accuracy.Lowest,
       });
 
+      //save the user location in the redux store
       dispatch(
         saveUserLocation({
           longitude: location.coords.longitude,
           latitude: location.coords.latitude,
         })
       );
-
+      //fetch the nearest pahrmacies around the user's location
       fetchNearbyPharmaciesCB(location);
     })();
   }, []);
 
   useEffect(() => {
+    //if the pharmacies object changes fit the screen to the pharmacies displayed
     pharmacies.length > 0 && fitMapToPolyline(pharmacies);
   }, [pharmacies]);
 
   const fetchNearbyPharmaciesCB = useCallback(
+    //handler to fetch the nearest pahrmacies around the user's location
+    //and update the map accordingly
+    //using callback to only fetch the data when the user location changes
     (location: {}) => {
       fetchNearbyPharmacies(
         encodeURIComponent(
@@ -79,6 +88,7 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
   );
 
   function fitMapToPolyline(data: IPharmacy[]) {
+    // getting the cordinates of the pharmacies to make the screen fit them all
     let coords = [];
     for (let i = 0; i < data.length; i++) {
       coords.push({
@@ -105,6 +115,7 @@ export default function Map({ activePharmacy, setActivePharmacy }: Props) {
   }
 
   const fetchNearbyPharmacies = (location: string): void => {
+    // fetching the nearest pharmacies arround the user's location
     axios
       .get(apiUrl + `api/pharmacies?location=${location}`)
       .then((response) => {

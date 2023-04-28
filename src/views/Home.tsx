@@ -32,18 +32,22 @@ export const Home = ({ navigation }: Props) => {
   const [activePharmacy, setActivePharmacy] = useState(0);
   const [showNav, setShowNav] = useState(false);
 
+  //getting the user's network information
   const netInfo = useNetInfo();
 
   const dispatch = useAppDispatch();
 
+  //getting the pharmacies lsit form the redux store
   const pharmacies = useAppSelector((state) => state.pharmacies);
 
   const flatListRef = React.useRef();
   const handlePharmacyClick = (pharmacyIndex: number) => {
+    // handeling the active farmacy clicked by the user
     setActivePharmacy(pharmacyIndex);
   };
 
   useEffect(() => {
+    //whenever the active farmacy changed, scroll to it in the list
     //@ts-ignore
     flatListRef?.current?.scrollToIndex({
       index: typeof activePharmacy == "number" ? activePharmacy : 0,
@@ -87,7 +91,7 @@ export const Home = ({ navigation }: Props) => {
       <View style={styles.bottomContainer}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={styles.title}>Nearby pharmacies</Text>
-       
+          {/* if the user is offline display the offline message */}
           {!netInfo.isConnected && (
             <Text
               style={{
@@ -96,7 +100,7 @@ export const Home = ({ navigation }: Props) => {
                 color: "red",
               }}
             >
-               {" OFFLINE"}
+              {" OFFLINE"}
             </Text>
           )}
         </View>

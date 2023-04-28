@@ -17,10 +17,12 @@ export default function Index() {
   const netInfo = useNetInfo();
 
   useEffect(() => {
+    // make sure the app is connected to the network otherwise it will direct to 404 page
     !netInfo.isConnected && navigation.navigate("NotConnected404");
   }, [netInfo.isConnected]);
 
   useEffect(() => {
+    // make sure the user is logged in otherwise it will direct to Login
     userInfo.accessToken == ""
       ? navigation.navigate("LoginEmail")
       : navigation.navigate("Home");
